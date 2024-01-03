@@ -1,0 +1,92 @@
+Enter your answer in the designated location. Do NOT remove lines that start
+with '='. Only replace your UNI and 'X'. You may include comments. If you have
+less than 3 group mates, please delete the extra 'students'.
+
+================================== student1 start ==============================
+tj2488: 40hrs
+difficulty: hmwk1 < hmwk2 < hmwk4 < hmwk5 < hmwk6 < hmwk3
+learned: hmwk1 < hmwk2 < hmwk5 < hmwk3 < hmwk4 < hmwk6
+rating: 5
+comments: I would appreciate it if we could have more hints on what corner cases
+to test on.
+
+=================================== student1 end ===============================
+
+================================== student2 start ==============================
+my2770: 40hrs
+difficulty: hmwk1 < hmwk2 < hmwk4 < hmwk6 < hmwk5 < hmwk3
+learned: hmwk1 < hmwk2 < hmwk4 < hmwk5 < hmwk6 < hmwk3
+rating: 5
+comments: Part 5 is a little harder and we can use more hints on that part.
+
+=================================== student2 end ===============================
+
+You may include other README information after this line:
+
+Contribution:
+Teng: Part 1, 2, 3, 4, 7, 8, 9, 10
+Mingfeng: Part 1, 2, 3, 4, 5, 6, 9, 11, 12
+
+We have tested every part of our work and are convinced that they are correct
+enough.
+
+Helper functions that we made:
+* ezfs_find_entry: find an entry inside of the directory's Dentry table. It returns
+the bh of the direct block of dir and sets res_dir to the pointer to the entry of
+the desired name.
+* ezfs_add_entry: Add an entry to the Dentry table.
+* ezfs_get_inode: Used by class-specific inode operation create. Get a free inode
+number and initialize the inode struct. Notice that this differs from ezfs_iget,
+which unconditionally gets the inode with the inode number. ezfs_get_inode will
+traverse the free_inodes list, grab the one that's not in use, and then do 
+ezfs_iget.
+* ezfs_get_block: Get a free data block.
+* truncate blocks is called when the # of data blocks changes, and free the now
+unused blocks accordingly.
+
+What are some file operations supported on your default Linux file system that are not
+supported by EZFS? Which of these affect the functionality of the programs you ran? In
+your README, note which applications you have used, which ones worked, and which ones
+do not.
+* We have implemented every application in the spec, and they work just fine.
+* Our file system currently does not support soft links, and that's going to affect of
+# of links.
+* We're not 100% sure that our truncate command works.
+
+test script: (start from the directory of this homework): 
+# We omitted the test cases in the spec, for simplicity.
+
+# Setup
+make
+dd bs=4096 count=1000 if=/dev/zero of=~/ez_disk.img
+sudo losetup --find --show ~/ez_disk.img
+sudo ./format_disk_as_ezfs /dev/loop0 1000
+sudo insmod -f myez.ko
+sudo mount -t myezfs /dev/loop0 /mnt/ez
+cd /mnt/ez
+
+# test stat/ls
+ls -alF
+stat .
+stat hello.txt
+
+# test subdir
+cd ./subdir
+mkdir subsubdir
+
+# test vim
+touch new_file.txt
+vim new_file.txt # write something to it and save
+
+# test writing to a file that incurs a new data block allocated to the file
+vim new_file.txt
+stat new_file.txt
+
+# test if truncate works correctly if a large file shrinks
+vim new_file.txt
+stat new_file.txt
+
+# unmount it and mount it again to make sure our records are persistent
+cd /mnt
+sudo umount /mnt/ez
+sudo mount -t myezfs /dev/loop0 /mnt/ez

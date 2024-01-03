@@ -1,0 +1,1 @@
+cmd_/home/mingfeng/f23-hmwk6-team51/myez.ko := ld -r -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T arch/x86/module.lds -o /home/mingfeng/f23-hmwk6-team51/myez.ko /home/mingfeng/f23-hmwk6-team51/myez.o /home/mingfeng/f23-hmwk6-team51/myez.mod.o;  true

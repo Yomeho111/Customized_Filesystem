@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "string.h": "c",
+        "typeinfo": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "compare": "c",
+        "uio.h": "c"
+    }
+}

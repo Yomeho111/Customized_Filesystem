@@ -1,0 +1,1 @@
+cmd_/home/mingfeng/f23-hmwk6-team51/Module.symvers :=  sed 's/ko$$/o/'  /home/mingfeng/f23-hmwk6-team51/modules.order | scripts/mod/modpost -m     -o /home/mingfeng/f23-hmwk6-team51/Module.symvers -e -i Module.symvers -T - 
